@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "username": "Groot",
+        "email": "admin@groot.com",
+        "password": "groot1234",
+        "balance": 0.0,
+        "is_admin": true
+    }
+]
