@@ -11,6 +11,8 @@ class user:
         
     def get_username(self):
         return self.username
+    def get_User_Statue(self):
+        return self.is_admin
     def get_balance(self):
         return self.__balance
     def get_email(self):
@@ -68,7 +70,7 @@ class admin(user):
      def __init__(self, username, email, password, balance=0):
         super().__init__(username, email, password, balance)
     
-def register_new_user(username, email, password, is_admin):
+def register_new_user(username, email, password, is_admin,balance = 0.0):
     # Step 1: Read the existing data
     try:
         with open("users.json", "r") as file:
@@ -90,7 +92,7 @@ def register_new_user(username, email, password, is_admin):
         "username": username,
         "email": email,
         "password": password, 
-        "balance": 0.0,
+        "balance": balance,
         "is_admin": is_admin
     }
 
