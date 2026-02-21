@@ -9,7 +9,8 @@ class user:
         self.id = user.TotalUsers
         self.isadmin = False
         
-    
+    def get_username(self):
+        return self.username
     def get_balance(self):
         return self.__balance
     def get_email(self):
@@ -63,18 +64,6 @@ class user:
                 print("unexpected error")
                 return False
                         
-            
-                   
-                
-                    
-     
-                
-                
-
-            
-        
-        
-    
 class admin(user):
      def __init__(self, username, email, password, balance=0):
         super().__init__(username, email, password, balance)
