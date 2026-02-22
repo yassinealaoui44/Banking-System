@@ -4,10 +4,11 @@ class user:
     def __init__(self, username,email,password,is_admin,balance = 0):
         self.username = username
         self.__email = email
-        self.__password
+        self.__password = password
         user.TotalUsers += 1
         self.id = user.TotalUsers
-        self.isadmin = False
+        self.isadmin = is_admin # <--- THE FIX
+        self.__balance = balance
         
     def get_username(self):
         return self.username
@@ -21,29 +22,61 @@ class user:
         return self.__email
     def set_balance(self,amount):
         self.__balance = amount
-    def send_money(self,amount,receiver):
-        self.set_balance(self.get_balance() - amount)
-        receiver.set_balance(receiver.get_balance() + amount)
+    def deposit(self,amount):
+        try:
+            with open("users.json","r") as file:
+                 users_list = json.load(file)
+        except FileNotFoundError:
+                print("Fatal error! Database not found\n")
+        for users_dict in users_list:
+            if self.id == users_dict["id"]:
+                self.__balance += amount
+                users_dict["balance"] = self.__balance
+                break
+        return True   
+    def exposit(self,amount):
+        try:
+            with open("users.json","r") as file:
+                 users_list = json.load(file)
+        except FileNotFoundError:
+                print("Fatal error! Database not found\n")
+        for users_dict in users_list:
+            if self.id == users_dict["id"]:
+                self.__balance -= amount
+                users_dict["balance"] = self.__balance
+                break
+        return True        
+    def send_money(self, amount, receiver_id):
         try:
             with open("users.json", "r") as file:
                  users_list = json.load(file)
         except FileNotFoundError:
-            print("Fatal Error! Database does not exist")
+            print("Fatal Error! Database does not exist.")
             return False
-        user_found = False
+            
+        receiver_found = False
         for user_dict in users_list:
-           if user_dict["id"] == receiver.id: 
-             user_dict["balance"] = self.get_balance()
-             user_found = True
-             print(f"Success! {user_dict['username']}'s new balance is {user_dict['balance']}")
-             break
-        if user_found:
-            with open("users.json","w") as file:
-                json.dump(users_list, file,indent=4)
-                return True
-        else:
-            print("The user with this id : '{receiver.id}' does not exists")
+            if user_dict["id"] == receiver_id: 
+                user_dict["balance"] += amount
+                receiver_found = True
+                print(f"Success! {user_dict['username']} received the funds.")
+                break
+                
+        if not receiver_found:
+            print(f"Transaction Failed: The user with ID '{receiver_id}' does not exist.")
             return False
+
+        self.set_balance(self.get_balance() - amount)
+        
+        for user_dict in users_list:
+            if user_dict["id"] == self.id:
+                user_dict["balance"] = self.get_balance()
+                break
+
+        with open("users.json", "w") as file:
+            json.dump(users_list, file, indent=4)
+            
+        return True
         
         def deposit(self,balance):
             self.set_balance(self.get_balance() + amount)
@@ -67,8 +100,8 @@ class user:
                 return False
                         
 class admin(user):
-     def __init__(self, username, email, password, balance=0):
-        super().__init__(username, email, password, balance)
+     def __init__(self, username, email, password,is_admin, balance=0):
+        super().__init__(username, email, password,is_admin, balance)
     
 def register_new_user(username, email, password, is_admin,balance = 0.0):
     # Step 1: Read the existing data

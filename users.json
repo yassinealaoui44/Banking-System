@@ -6,5 +6,21 @@
         "password": "groot1234",
         "balance": 0.0,
         "is_admin": true
+    },
+    {
+        "id": 2,
+        "username": "yassine",
+        "email": "test@test.test",
+        "password": "test",
+        "balance": 388.0,
+        "is_admin": false
+    },
+    {
+        "id": 3,
+        "username": "test-signup@test.tst",
+        "email": "test-signup@test.tst",
+        "password": "kkk",
+        "balance": 0.0,
+        "is_admin": false
     }
 ]
